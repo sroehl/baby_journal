@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby Journal</title>
+
+    <!-- Disable tap highlight on IE -->
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <!-- Web Application Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Baby Journal">
+    <!--<link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">-->
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Baby Journal">
+    <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileColor" content="#2F3BA2">
+
+    <!-- Color the status bar on mobile devices -->
+    <meta name="theme-color" content="#2F3BA2">
+
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
+
+    <!-- Material Design icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <link rel="stylesheet" href="static/styles/flatpickr.min.css">
+    <script src="static/scripts/flatpickr.min.js"></script>
+
+    <link rel="stylesheet" href="static/styles/main.css">
+    <link rel="stylesheet" href="static/styles/diaper_journal.css">
+
+  </head>
+  <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+        </div>
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+          <h3>Baby Journal</h3>
+        </div>
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+        </div>
+        <ul class="topnav">
+          <li><a href="/index">Overview</a></li>
+          <li><a href="/diapers">Diapers</a></li>
+          <li><a href="/bottles">Bottles</a></li>
+          <li><a href="/food">Food</a></li>
+          <li><a href="/settings">Settings</a></li>
+          <li class="icon">
+            <a href="javascript:void(0);" onclick="myFunction()">&#9776;</a>
+          </li>
+        </ul>
+      </header>
+      <main class="mdl-layout__content">
+          {% block content %}{% endblock %}
+      </main>
+    </div>
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="static/scripts/main.js"></script>
+
+  </body>
+</html>

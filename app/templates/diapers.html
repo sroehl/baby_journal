@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<form id="diaper_form" action="/add_diaper" method="post">
+    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="poop-diaper">
+      <input type="radio" id="poop-diaper" class="mdl-radio__button" name="diaper_type" value="poop" checked>
+      <span class="mdl-radio__label">Poop</span>
+    </label>
+    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="pee-diaper">
+      <input type="radio" id="pee-diaper" class="mdl-radio__button" name="diaper_type" value="pee">
+      <span class="mdl-radio__label">Pee</span>
+    </label>
+    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="both-diaper">
+      <input type="radio" id="both-diaper" class="mdl-radio__button" name="diaper_type" value="both">
+      <span class="mdl-radio__label">Both</span>
+    </label>
+    <br>
+    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="small-diaper">
+      <input type="radio" id="small-diaper" class="mdl-radio__button" name="diaper_size" value="small" checked>
+      <span class="mdl-radio__label">Small</span>
+    </label>
+    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="medium-diaper">
+      <input type="radio" id="medium-diaper" class="mdl-radio__button" name="diaper_size" value="medium">
+      <span class="mdl-radio__label">Medium</span>
+    </label>
+    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="large-diaper">
+      <input type="radio" id="large-diaper" class="mdl-radio__button" name="diaper_size" value="large">
+      <span class="mdl-radio__label">Large</span>
+    </label>
+    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="overflowing-diaper">
+      <input type="radio" id="overflowing-diaper" class="mdl-radio__button" name="diaper_size" value="overflowing">
+      <span class="mdl-radio__label">Overflowing</span>
+    </label>
+    <br>
+    <input class="flatpickr" id="datepicker" name="date" type="text" placeholder="Select Date..">
+    <br>
+    <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+      Log!
+    </button>
+</form>
+<ul class="diaper-list mdl-list" id="diaperList">
+    {% for diaper in diapers %}
+        <li>
+            <span id="diaper_{{ diaper.id}}">{{ child_name }} had a {{ diaper.size }} {{ diaper.diaper_type }} at {{ diaper.date }}
+                <img class="deleteDiapersImg" height=20 width=20 id="{{ diaper.id }}" src="static/images/delete.png" onclick="diaperDeleteClicked(this)"/>
+            </span>
+        </li>
+    {% endfor %}
+</ul>
+<script>
+    var currentdate = new Date();
+    document.getElementById("datepicker").flatpickr({enableTime: true, defaultDate: currentdate});
+</script>
+{% endblock %}

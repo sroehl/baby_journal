@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby Journal</title>
+
+    <!-- Disable tap highlight on IE -->
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <!-- Web Application Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Baby Journal">
+    <!--<link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">-->
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Baby Journal">
+    <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileColor" content="#2F3BA2">
+
+    <!-- Color the status bar on mobile devices -->
+    <meta name="theme-color" content="#2F3BA2">
+
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
+
+    <!-- Material Design icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <link rel="stylesheet" href="static/styles/main.css">
+    <link rel="stylesheet" href="static/styles/diaper_journal.css">
+
+	
+	<link rel='stylesheet' href="libs/sc-date-time/dist/sc-date-time.css">
+	<script src="libs/sc-date-time/dist/sc-date-time.js"></script>
+
+    
+  </head>
+  <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+        </div>
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+          <h3>Baby Journal</h3>
+        </div>
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+        </div>
+        <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
+          <a href="#overview" class="mdl-layout__tab is-active">Overview</a>
+          <a href="#diapers" class="mdl-layout__tab diapers">Diapers</a>
+          <a href="#bottles" class="mdl-layout__tab">Bottles</a>
+          <a href="#food" class="mdl-layout__tab">Food</a>
+          <a href="#settings" class="mdl-layout__tab">Settings</a>
+        </div>
+      </header>
+      <main class="mdl-layout__content">
+        <div class="mdl-layout__tab-panel is-active" id="overview">
+			main
+		</div>
+        <div class="mdl-layout__tab-panel" id="diapers">
+			<form id="diaper_form" action="#">
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="poop-diaper">
+				  <input type="radio" id="poop-diaper" class="mdl-radio__button" name="diaper_type" value="poop" checked>
+				  <span class="mdl-radio__label">Poop</span>
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="pee-diaper">
+				  <input type="radio" id="pee-diaper" class="mdl-radio__button" name="diaper_type" value="pee">
+				  <span class="mdl-radio__label">Pee</span>
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="both-diaper">
+				  <input type="radio" id="both-diaper" class="mdl-radio__button" name="diaper_type" value="both">
+				  <span class="mdl-radio__label">Both</span>
+				</label>
+				<br>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="small-diaper">
+				  <input type="radio" id="small-diaper" class="mdl-radio__button" name="diaper_size" value="small" checked>
+				  <span class="mdl-radio__label">Small</span>
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="medium-diaper">
+				  <input type="radio" id="medium-diaper" class="mdl-radio__button" name="diaper_size" value="medium">
+				  <span class="mdl-radio__label">Medium</span>
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="large-diaper">
+				  <input type="radio" id="large-diaper" class="mdl-radio__button" name="diaper_size" value="large">
+				  <span class="mdl-radio__label">Large</span>
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="overflowing-diaper">
+				  <input type="radio" id="overflowing-diaper" class="mdl-radio__button" name="diaper_size" value="overflowing">
+				  <span class="mdl-radio__label">Overflowing</span>
+				</label>
+				<br>
+				<time-date-picker ng-model="dateValue"></time-date-picker>
+				<br>
+				<button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+				  Log!
+				</button>
+			</form>
+			<ul class="diaper-list mdl-list" id="diaperList">
+			</ul>
+		</div>
+        <div class="mdl-layout__tab-panel" id="bottles">
+			<form id="bottle_form" action="#">
+				<input class="mdl-slider mdl-js-slider" type="range" min="0" max="10" value="0" tabindex="0" id="bottle-slider"
+						for="amount" oninput="amount.value=rangeText.value" name="rangeText">
+			  <div class="mdl-textfield mdl-js-textfield">
+				<input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="bottle-text"
+						for="rangeText" oninput="rangeText.value=amount.value" name="amount" value="0">oz
+				<span class="mdl-textfield__error">Input is not a number!</span>
+			  </div>
+				<br>
+				<button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+				  Log!
+				</button>
+			</form>
+			<ul class="bottle-list mdl-list" id="bottleList">
+			</ul>
+		</div>
+        <div class="mdl-layout__tab-panel" id="food">
+			food
+		</div>
+        <div class="mdl-layout__tab-panel" id="settings">
+			settings
+		</div>
+      </main>
+    </div>
+
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
+    <script src="static/scripts/main.js"></script>
+
+  </body>
+</html>

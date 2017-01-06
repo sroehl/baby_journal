@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<form id="bottle_form" action="/add_bottle" method="post">
+    <input class="mdl-slider mdl-js-slider" type="range" min="0" max="10" value="0" tabindex="0" id="bottle-slider"
+            for="amount" oninput="amount.value=rangeText.value" name="rangeText">
+  <div class="mdl-textfield mdl-js-textfield">
+    <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="bottle-text"
+            for="rangeText" oninput="rangeText.value=amount.value" name="amount" value="0">oz
+    <span class="mdl-textfield__error">Input is not a number!</span>
+  </div>
+    <br>
+        <input class="flatpickr" id="datepicker" name="date" type="text" placeholder="Select Date..">
+    <br>
+    <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+      Log!
+    </button>
+</form>
+<ul class="bottle-list mdl-list" id="bottleList">
+    {% for bottle in bottles %}
+        <li>
+            <span>{{ child_name }} drank {{ bottle.amount }} oz at {{ bottle.date }}
+                <img class="bottleBottlesImg" height=20 width=20 id="{{ bottle.id }}" src="static/images/delete.png" onclick="bottleDeleteClicked()"/>
+            </span>
+        </li>
+    {% endfor %}
+</ul>
+<script>
+    var currentdate = new Date();
+    document.getElementById("datepicker").flatpickr({enableTime: true, defaultDate: currentdate});
+</script>
+{% endblock %}
