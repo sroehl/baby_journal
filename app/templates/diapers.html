@@ -47,7 +47,10 @@
     {% endfor %}
 </ul>
 <script>
-    var currentdate = new Date();
-    document.getElementById("datepicker").flatpickr({enableTime: true, defaultDate: currentdate});
+    function setup(){
+        var currentdate = new Date();
+        document.getElementById("datepicker").flatpickr({enableTime: true, defaultDate: currentdate});
+    }
+    window.onload = setup;
 </script>
 {% endblock %}
