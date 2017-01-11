@@ -19,7 +19,7 @@
     {% for bottle in bottles %}
         <li>
             <span>{{ child_name }} drank {{ bottle.amount }} oz at {{ bottle.date }}
-                <img class="bottleBottlesImg" height=20 width=20 id="{{ bottle.id }}" src="static/images/delete.png" onclick="bottleDeleteClicked()"/>
+                <img class="bottleBottlesImg" height=20 width=20 id="{{ bottle.id }}" src="static/images/delete.png" onclick="bottleDeleteClicked(this)"/>
             </span>
         </li>
     {% endfor %}

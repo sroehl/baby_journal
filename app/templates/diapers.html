@@ -15,23 +15,29 @@
     </label>
     <br>
     <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="small-diaper">
-      <input type="radio" id="small-diaper" class="mdl-radio__button" name="diaper_size" value="small" checked>
+      <input type="radio" id="small-diaper" class="mdl-radio__button" name="size" value="small" checked>
       <span class="mdl-radio__label">Small</span>
     </label>
     <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="medium-diaper">
-      <input type="radio" id="medium-diaper" class="mdl-radio__button" name="diaper_size" value="medium">
+      <input type="radio" id="medium-diaper" class="mdl-radio__button" name="size" value="medium">
       <span class="mdl-radio__label">Medium</span>
     </label>
     <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="large-diaper">
-      <input type="radio" id="large-diaper" class="mdl-radio__button" name="diaper_size" value="large">
+      <input type="radio" id="large-diaper" class="mdl-radio__button" name="size" value="large">
       <span class="mdl-radio__label">Large</span>
     </label>
     <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="overflowing-diaper">
-      <input type="radio" id="overflowing-diaper" class="mdl-radio__button" name="diaper_size" value="overflowing">
+      <input type="radio" id="overflowing-diaper" class="mdl-radio__button" name="size" value="overflowing">
       <span class="mdl-radio__label">Overflowing</span>
     </label>
     <br>
     <input class="flatpickr" id="datepicker" name="date" type="text" placeholder="Select Date..">
+    <br>
+    Size<select name="diaper_size">
+        {% for size in sizes %}
+            <option {{ size.selected }} value={{ size.size }}>{{ size.size }}</option>
+        {% endfor %}
+    </select>
     <br>
     <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
       Log!

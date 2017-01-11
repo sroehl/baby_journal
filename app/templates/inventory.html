@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+  <div class="mdl-tabs__tab-bar">
+      <a href="#inv_diapers_panel" class="mdl-tabs__tab">Diapers</a>
+      <a href="#inv_formula_panel" class="mdl-tabs__tab">Formula</a>
+  </div>
+  <div class="mdl-tabs__panel is-active" id="inv_diapers_panel">
+    <form id="inv_diaper_form" action="/add_inventory_diapers" method="post">
+        Size<select name="size">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <div class="mdl-textfield mdl-js-textfield">
+            Number of diapers<input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="diaper-text"
+                for="rangeText" oninput="rangeText.value=amount.value" name="amount" value="">
+            <span class="mdl-textfield__error">Input is not a number!</span>
+        </div>
+        <br>
+        <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+          Add diapers!
+        </button>
+    </form>
+      <br>
+      <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp center">
+          <thead>
+          <tr>
+              <th>Size</th>
+              <th>Amount</th>
+          </tr>
+          </thead>
+          <tbody>
+        {% for diaper in diapers %}
+        <tr>
+            <td>{{ diaper.size }}</td>
+            <td>{{ diaper.amount }}</td>
+        </tr>
+        {% endfor %}
+          </tbody>
+      </table>
+  </div>
+  <div class="mdl-tabs__panel" id="inv_formula_panel">
+    <form id="inv_formula_form" action="/add_inventory_formula" method="post">
+        <div class="mdl-textfield mdl-js-textfield">
+            Makes <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="formula-text"
+                for="rangeText" oninput="rangeText.value=amount.value" name="amount" value=""> oz
+            <span class="mdl-textfield__error">Input is not a number!</span>
+        </div>
+        <br>
+        <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+          Add formula!
+        </button>
+    </form>
+    <br>
+      You have {{ formula.amount }} ounces left!
+  </div>
+</div>
+{% endblock %}

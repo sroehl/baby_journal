@@ -46,13 +46,15 @@ class Diaper(db.Model):
     child_id = db.Column('child_id', db.Integer, db.ForeignKey("children.child_id"))
     date = db.Column('date', db.DateTime)
     size = db.Column('size', db.String(11))
+    diaper_size = db.Column('diaper_size', db.Integer)
     diaper_type = db.Column('type', db.String(4))
 
-    def __init__(self, child_id, date, size, diaper_type):
+    def __init__(self, child_id, date, size, diaper_type, diaper_size):
         self.child_id = child_id
         self.date = date
         self.size = size
         self.diaper_type = diaper_type
+        self.diaper_size = diaper_size
 
 
 class Bottle(db.Model):
@@ -66,6 +68,32 @@ class Bottle(db.Model):
         self.child_id = child_id
         self.date = date
         self.amount = amount
+
+
+class InventoryDiapers(db.Model):
+    __tablename__ = 'inventory_diapers'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column('user_id', db.Integer, db.ForeignKey("users.id"))
+    size = db.Column('size', db.Integer)
+    amount = db.Column('amount', db.Integer)
+
+    def __init__(self, user_id, size, amount):
+        self.user_id = user_id
+        self.size = size
+        self.amount = amount
+
+
+class InventoryFormula(db.Model):
+    __tablename__ = 'inventory_formula'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column('user_id', db.Integer, db.ForeignKey("users.id"))
+    amount = db.Column('amount', db.Integer)
+
+    def __init__(self, user_id, amount):
+        self.user_id = user_id
+        self.amount = amount
+
+
 
 
 class Setting(db.Model):

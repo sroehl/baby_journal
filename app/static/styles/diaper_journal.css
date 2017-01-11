@@ -8,3 +8,24 @@
 .diaper_list{
 	width:500px;
 }
+
+#inv_diaper_form{
+    text-align:center;
+}
+
+#inv_formula_form{
+    text-align:center;
+}
+
+#inv_formula_panel{
+    text-align:center;
+}
+
+#inv_diapers_panel{
+	text-align:center;
+}
+
+table.center {
+    margin-left:auto;
+    margin-right:auto;
+  }
