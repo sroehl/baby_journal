@@ -1,5 +1,6 @@
 import datetime
-from app import db
+from app import db, app
+from itsdangerous import Serializer, BadSignature
 
 
 class User(db.Model):
@@ -9,6 +10,7 @@ class User(db.Model):
     password = db.Column('password', db.String(60))
     email = db.Column('email', db.String(120), unique=True, index=True)
     registered_on = db.Column('registered_on', db.DateTime)
+    api_key = db.Column('api_key', db.String(30))
 
     def __init__(self, username, password, email):
         self.username = username
@@ -27,6 +29,12 @@ class User(db.Model):
 
     def is_anonymous(self):
         return False
+
+    def generate_auth_token(self):
+        s = Serializer(app.config['SECRET_KEY'])
+        token = s.dumps({'id': self.id}).split(".")[1]
+        self.api_key = token
+        return token
 
 
 class Child(db.Model):
@@ -56,6 +64,14 @@ class Diaper(db.Model):
         self.diaper_type = diaper_type
         self.diaper_size = diaper_size
 
+    @property
+    def serialize(self):
+        return {'id': self.id,
+                'child_id': self.child_id,
+                'date': self.date,
+                'diaper_type': self.diaper_type,
+                'diaper_size': self.diaper_size}
+
 
 class Bottle(db.Model):
     __tablename__ = 'bottles'
@@ -68,6 +84,13 @@ class Bottle(db.Model):
         self.child_id = child_id
         self.date = date
         self.amount = amount
+
+    @property
+    def serialize(self):
+        return {'id': self.id,
+                'child_id': self.child_id,
+                'date': self.date,
+                'amount': self.amount}
 
 
 class InventoryDiapers(db.Model):
