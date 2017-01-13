@@ -9,9 +9,11 @@ def main():
         password = bcrypt.generate_password_hash(password='test').decode('utf-8')
         email = 'sprzeo@gmail.com'
         user = models.User(username, password, email)
+        print("Creating user")
         db.session.add(user)
         db.session.flush()
         db.session.commit()
+        print("Creating child")
         child = models.Child(user.id, 'Olive')
         db.session.add(child)
         db.session.flush()

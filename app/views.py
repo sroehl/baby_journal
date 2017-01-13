@@ -1,10 +1,11 @@
-from app import app, api, login_manager, bcrypt, db
+from app import app, login_manager, bcrypt, db, api
 from flask import render_template, redirect, url_for, session, flash, request, jsonify
 from flask_login import login_required, login_user, logout_user, current_user
 
 from flask_bcrypt import Bcrypt
-from .models import User, Diaper, Bottle, Child, InventoryDiapers, InventoryFormula
+from .models import User, Diaper, Bottle, Child
 from .forms import LoginForm
+from .utility import *
 
 import datetime
 
@@ -47,7 +48,7 @@ def inventory():
 @login_required
 def add_inventory_diapers():
     amount = int(request.form['amount'])
-    size = request.form['size']
+    size = int(request.form['size'])
     change_diaper_inventory(size, amount)
     return redirect(url_for('inventory'))
 
@@ -106,7 +107,6 @@ def delete_diaper():
     diaper = Diaper.query.filter_by(id=request.form['id']).first()
 
     change_diaper_inventory(diaper.diaper_size, 1)
-    #result = Diaper.query.filter_by(id=request.form['id']).delete()
     result = Diaper.query.filter_by(id=request.form['id']).delete()
     db.session.commit()
     return jsonify({"result": result})
@@ -115,6 +115,11 @@ def delete_diaper():
 @login_manager.user_loader
 def load_user(userid):
     return User.query.filter_by(id=userid).first()
+
+
+@login_manager.header_loader
+def load_user_from_header(header_val):
+    return User.query.filter_by(api_key=header_val).first()
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -140,26 +145,3 @@ def logout():
     logout_user()
     return render_template('login.html', form=LoginForm())
 
-
-def change_formula_inventory(amount):
-    formula = InventoryFormula.query.filter_by(user_id=current_user.id).first()
-    if formula:
-        formula.amount = formula.amount + amount
-    else:
-        inv_formula = InventoryFormula(current_user.id, amount)
-        db.session.add(inv_formula)
-    db.session.commit()
-
-
-def change_diaper_inventory(size, amount):
-    if amount is str:
-        amount = int(amount)
-    if size is str:
-        size = int(size)
-    diaper = InventoryDiapers.query.filter_by(user_id=current_user.id, size=size).first()
-    if diaper:
-        diaper.amount = diaper.amount + amount
-    else:
-        inv_diaper = InventoryDiapers(current_user.id, size, amount)
-        db.session.add(inv_diaper)
-    db.session.commit()
