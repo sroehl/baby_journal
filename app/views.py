@@ -1,5 +1,5 @@
 from app import app, login_manager, bcrypt, db, api
-from flask import render_template, redirect, url_for, session, flash, request, jsonify
+from flask import render_template, redirect, url_for, session, flash, request, jsonify, abort
 from flask_login import login_required, login_user, logout_user, current_user
 
 from flask_bcrypt import Bcrypt
@@ -130,12 +130,13 @@ def login():
         if user:
             if Bcrypt.check_password_hash(None, pw_hash=user.password, password=form.password.data):
                 login_user(user)
-                return redirect(url_for('index'))
+                target = request.args.get('next')
+                return redirect(target or url_for('index'))
             else:
                 flash('Invalid login.  Please login again')
                 return redirect(url_for('login'))
         else:
-          flash('Invalid login.  Please login again')
+            flash('Invalid login.  Please login again')
     return render_template('login.html', form=form)
 
 

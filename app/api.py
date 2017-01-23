@@ -1,5 +1,5 @@
 from app import app, db
-from flask import request, jsonify
+from flask import request, jsonify, redirect
 from .models import User, Diaper, Bottle, Child, InventoryDiapers, InventoryFormula
 from .utility import change_diaper_inventory, change_formula_inventory
 from flask_login import login_required, current_user
@@ -13,7 +13,20 @@ def request_token():
     user = User.query.get(current_user.id)
     token = user.generate_auth_token()
     db.session.commit()
+    if request.args.get('client_id') == 'BabyJournalAlexa':
+        state = request.args.get('state')
+        redirect_uri = request.args.get('redirect_uri')
+        return link_alexa(state, redirect_uri, token)
     return token
+
+
+def link_alexa(state, redirect_uri, token):
+    uri = redirect_uri
+    uri += '#state=' + state
+    uri += '&access_token=' + token
+    uri += '&token_type=' + 'Bearer'
+    print(uri)
+    return redirect(uri)
 
 
 @app.route('/api/diaper', methods=['POST', 'GET'])
