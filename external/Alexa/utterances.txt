@@ -1,0 +1,2 @@
+AddDiaper add {diaper_size} {diaper_type} diaper
+AddBottle add {amount} ounce bottle

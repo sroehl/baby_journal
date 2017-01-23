@@ -1,2 +1,6 @@
 from app import app
-app.run(host='0.0.0.0', debug=True)
+import ssl
+
+context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_1)
+context.load_cert_chain('cert/certificate.pem', 'cert/private-key.pem')
+app.run(host='0.0.0.0', debug=True, ssl_context=context)

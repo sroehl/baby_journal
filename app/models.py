@@ -70,7 +70,7 @@ class Diaper(db.Model):
                 'child_id': self.child_id,
                 'date': self.date,
                 'diaper_type': self.diaper_type,
-                'diaper_size': self.diaper_size}
+                'diaper_size': self.size}
 
 
 class Bottle(db.Model):
