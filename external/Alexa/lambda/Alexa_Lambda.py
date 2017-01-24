@@ -91,10 +91,10 @@ def handle_session_end_request():
 
 
 def add_diaper(intent, session, access_token):
-    if 'diaper_type' in intent['slots'] and 'diaper_size' in intent['slots']:
+    if 'diaper_type' in intent['slots'] and 'diaper_load' in intent['slots']:
         diaper_type = intent['slots']['diaper_type']['value']
-        diaper_size = intent['slots']['diaper_size']['value']
-        payload = {'size': diaper_size, 'type': diaper_type}
+        diaper_load = intent['slots']['diaper_load']['value']
+        payload = {'size': diaper_load, 'type': diaper_type}
         headers = {'Authorization': access_token}
         r = requests.post(URL + 'diaper', json=payload, headers=headers, verify=False)
         if r.status_code == requests.codes.ok:
@@ -118,8 +118,68 @@ def add_bottle(intent, session, access_token):
             speech_output = "Successfully added a " + str(response_json['amount']) + " ounce bottle"
         else:
             speech_output = 'Failed to add bottle'
-        print(speech_output)
         return build_response({}, build_speech_response(intent['name'], speech_output, '', True))
+
+
+def get_inventory_diaper(intent, session, access_token):
+    diaper_size = None
+    if 'diaper_size' in intent['slots']:
+        diaper_size = intent['slots']['diaper_size']['value']
+    headers = {'Authorization': access_token}
+    r = requests.get(URL + 'inventory/diaper', headers=headers)
+    if r.status_code == requests.codes.ok:
+        response_json = r.json()
+        if diaper_size is None:
+            speech_output = "You have "
+            for key in response_json:
+                speech_output + str(response_json[key]) + " size " + str(key) + " diapers left, "
+        else:
+            speech_output = "You have " + str(response_json[diaper_size]) + " size " + diaper_size + " diapers left"
+    else:
+        speech_output = "Failed to get inventory of diapers"
+    return build_response({}, build_speech_response(intent['name'], speech_output, '', True))
+
+
+def add_inventory_diaper(intent, session, access_token):
+    if 'diaper_size' in intent['slots'] and 'amount' in intent['slots']:
+        diaper_size = int(intent['slots']['diaper_size']['value'])
+        amount = int(intent['slots']['amount']['value'])
+        payload = {'size': diaper_size, 'amount': amount}
+        headers = {'Authorization': access_token}
+        r = requests.post(URL + 'inventory/diaper', json=payload, headers=headers, verify=False)
+        if r.status_code == requests.codes.ok:
+            response_json = r.json()
+            speech_output = "You now have " + str(response_json['amount']) + " size " \
+                            + str(response_json['size']) + " diapers left"
+        else:
+            speech_output = 'Failed to add diapers to inventory'
+        return build_response({}, build_speech_response(intent['name'], speech_output, '', True))
+
+
+def add_inventory_bottle(intent, session, access_token):
+    if 'amount' in intent['slots']:
+        amount = int(intent['slots']['amount']['value'])
+        headers = {'Authorization': access_token}
+        payload = {'amount': amount}
+        r = requests.post(URL + 'inventory/bottle', json=payload, headers=headers, verify=False)
+        if r.status_code == requests.codes.ok:
+            response_json = r.json()
+            speech_output = "You now have " + str(response_json['amount']) + " " \
+                            + "ounces of formula left"
+        else:
+            speech_output = 'Failed to add formula to inventory'
+        return build_response({}, build_speech_response(intent['name'], speech_output, '', True))
+
+
+def get_inventory_bottle(intent, session, access_token):
+    headers = {'Authorization': access_token}
+    r = requests.get(URL + 'inventory/bottle', headers=headers)
+    if r.status_code == requests.codes.ok:
+        response_json = r.json()
+        speech_output = "You have " + str(response_json['amount']) + " ounces of formula left"
+    else:
+        speech_output = "Failed to get inventory of formula"
+    return build_response({}, build_speech_response(intent['name'], speech_output, '', True))
 
 
 # --------------- Events ------------------
@@ -156,6 +216,14 @@ def on_intent(intent_request, session, access_token):
         return add_diaper(intent, session, access_token)
     elif intent_name == 'AddBottle':
         return add_bottle(intent, session, access_token)
+    elif intent_name == 'GetInventoryDiaper':
+        return get_inventory_diaper(intent, session, access_token)
+    elif intent_name == 'GetInventoryBottle':
+        return get_inventory_bottle(intent, session, access_token)
+    elif intent_name == 'AddInventoryDiaper':
+        return add_inventory_diaper(intent, session, access_token)
+    elif intent_name == 'AddInventoryBottle':
+        return add_inventory_bottle(intent, session, access_token)
     else:
         raise ValueError("Invalid intent")
 

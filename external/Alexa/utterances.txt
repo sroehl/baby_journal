@@ -1,2 +1,14 @@
-AddDiaper add {diaper_size} {diaper_type} diaper
+AddDiaper add {diaper_load} {diaper_type} diaper
 AddBottle add {amount} ounce bottle
+GetInventoryDiaper how many diapers size {diaper_size} are left
+GetInventoryDiaper how many diapers are left
+GetInventoryDiaper how many size {diaper_size} left
+GetInventoryDiaper how many {diaper_size} left
+GetInventoryBottle how much formula left
+GetInventoryBottle how much formula do I have
+AddInventoryDiaper add {amount} size {diaper_size} diapers to inventory
+AddInventoryDiaper bought {amount} size {diaper_size} diapers
+AddInventoryDiaper increase size {diaper_size} by {amount} of diapers
+AddInventoryBottle add {amount} ounces of formula to inventory
+AddInventoryBottle bought {amount} ounces of formula
+AddInventoryBottle increase formula by {amount}

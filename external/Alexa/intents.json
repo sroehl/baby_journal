@@ -1,0 +1,60 @@
+{
+  "intents": [
+    {
+      "intent": "AddDiaper",
+      "slots": [
+        {
+          "name": "diaper_type",
+          "type": "LIST_OF_TYPES"
+        },
+        {
+          "name": "diaper_load",
+          "type": "LIST_OF_LOADS"
+        }
+      ]
+    },
+    {
+      "intent": "AddBottle",
+      "slots": [
+        {
+          "name": "amount",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "GetInventoryDiaper",
+      "slots": [
+        {
+          "name": "diaper_size",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "GetInventoryBottle"
+    },
+    {
+      "intent": "AddInventoryDiaper",
+      "slots": [
+        {
+          "name": "diaper_size",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "amount",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "AddInventoryBottle",
+      "slots": [
+        {
+          "name": "amount",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    }
+  ]
+}
