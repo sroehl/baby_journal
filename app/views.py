@@ -4,7 +4,7 @@ from flask_login import login_required, login_user, logout_user, current_user
 
 from flask_bcrypt import Bcrypt
 from .models import User, Diaper, Bottle, Child
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
 from .utility import *
 
 import datetime
@@ -131,6 +131,9 @@ def login():
             if Bcrypt.check_password_hash(None, pw_hash=user.password, password=form.password.data):
                 login_user(user)
                 target = request.args.get('next')
+                print(target)
+                if target == '/logout':
+                    target = None
                 return redirect(target or url_for('index'))
             else:
                 flash('Invalid login.  Please login again')
@@ -139,6 +142,26 @@ def login():
             flash('Invalid login.  Please login again')
     return render_template('login.html', form=form)
 
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = bcrypt.generate_password_hash(password=form.password.data).decode('utf-8')
+        email = form.email.data
+        child_name = form.child_name.data
+        user = User(username, password, email)
+        db.session.add(user)
+        db.session.flush()
+        db.session.commit()
+        child = Child(user.id, child_name)
+        db.session.add(child)
+        db.session.flush()
+        db.session.commit()
+        login_user(user)
+        return redirect(url_for('index'))
+    return render_template('register.html', form=form)
 
 @app.route("/logout")
 @login_required

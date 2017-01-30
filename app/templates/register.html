@@ -1,0 +1,14 @@
+{% extends "user_base.html" %}
+{% block content %}
+    <form class="register-form" action="" method="post">
+      {{ form.hidden_tag() }}
+        <dl>
+            {{ render_field(form.username) }}
+            {{ render_field(form.password) }}
+            {{ render_field(form.email) }}
+            {{ render_field(form.child_name) }}
+        </dl>
+      <button>create</button>
+      <p class="message">Already registered? <a href="/login">Sign In</a></p>
+    </form>
+{% endblock %}
