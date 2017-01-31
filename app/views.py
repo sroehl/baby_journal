@@ -151,6 +151,9 @@ def register():
         password = bcrypt.generate_password_hash(password=form.password.data).decode('utf-8')
         email = form.email.data
         child_name = form.child_name.data
+        if User.query.filter_by(username=username).first() or User.query.filter_by(email=email):
+            flash("Username or email already registered")
+            return render_template('register.html', form=form)
         user = User(username, password, email)
         db.session.add(user)
         db.session.flush()

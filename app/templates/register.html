@@ -1,6 +1,13 @@
 {% extends "user_base.html" %}
 {% block content %}
     <form class="register-form" action="" method="post">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <b>{{ message }}</b>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
       {{ form.hidden_tag() }}
         <dl>
             {{ render_field(form.username) }}

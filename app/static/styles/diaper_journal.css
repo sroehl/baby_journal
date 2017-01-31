@@ -124,3 +124,8 @@ table.center {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+#user_title {
+text-align: center;
+color: 	#F8F8FF;
+}
