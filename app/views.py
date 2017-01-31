@@ -7,8 +7,6 @@ from .models import User, Diaper, Bottle, Child
 from .forms import LoginForm, RegisterForm
 from .utility import *
 
-import datetime
-
 
 @app.route('/')
 @app.route('/index')
@@ -165,6 +163,7 @@ def register():
         login_user(user)
         return redirect(url_for('index'))
     return render_template('register.html', form=form)
+
 
 @app.route("/logout")
 @login_required

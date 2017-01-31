@@ -1,5 +1,5 @@
 from app import app, db, models, bcrypt
-from datetime import datetime
+
 
 def main():
     with app.app_context():

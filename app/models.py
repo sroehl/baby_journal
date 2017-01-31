@@ -1,6 +1,6 @@
 import datetime
 from app import db, app
-from itsdangerous import Serializer, BadSignature
+from itsdangerous import Serializer
 
 
 class User(db.Model):
@@ -115,8 +115,6 @@ class InventoryFormula(db.Model):
     def __init__(self, user_id, amount):
         self.user_id = user_id
         self.amount = amount
-
-
 
 
 class Setting(db.Model):
