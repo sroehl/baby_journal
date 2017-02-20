@@ -20,9 +20,9 @@ def index():
 def diapers():
     child = Child.query.filter_by(user_id=current_user.id).first()
     diapers = Diaper.query.filter_by(child_id=child.child_id).order_by(Diaper.date.desc())[0:30]
-    sizes = [{'size': '1'}, {'size': '2'}, {'size': '3'}, {'size': '4'}, {'size': '5'}]
+    sizes = [{'size': '0'}, {'size': '1'}, {'size': '2'}, {'size': '3'}, {'size': '4'}, {'size': '5'}]
     if len(diapers) > 0:
-        sizes[diapers[0].diaper_size - 1]['selected'] = 'selected'
+        sizes[diapers[0].diaper_size]['selected'] = 'selected'
     return render_template('diapers.html', child_name=child.child_name, diapers=diapers, sizes=sizes)
 
 
@@ -80,7 +80,7 @@ def add_diaper():
 def add_bottle():
     child = Child.query.filter_by(user_id=current_user.id).first()
     date = request.form['date']
-    amount = int(request.form['amount'])
+    amount = float(request.form['amount'])
     bottle = Bottle(child.child_id, date, amount)
     db.session.add(bottle)
     db.session.flush()

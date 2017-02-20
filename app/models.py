@@ -78,7 +78,7 @@ class Bottle(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     child_id = db.Column('child_id', db.Integer, db.ForeignKey("children.child_id"))
     date = db.Column('date', db.DateTime)
-    amount = db.Column('amount', db.Integer)
+    amount = db.Column('amount', db.Float)
 
     def __init__(self, child_id, date, amount):
         self.child_id = child_id
@@ -98,7 +98,7 @@ class InventoryDiapers(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey("users.id"))
     size = db.Column('size', db.Integer)
-    amount = db.Column('amount', db.Integer)
+    amount = db.Column('amount', db.Float)
 
     def __init__(self, user_id, size, amount):
         self.user_id = user_id
