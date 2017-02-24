@@ -127,7 +127,7 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user:
             if Bcrypt.check_password_hash(None, pw_hash=user.password, password=form.password.data):
-                login_user(user)
+                login_user(user, remember=True)
                 target = request.args.get('next')
                 print(target)
                 if target == '/logout':
