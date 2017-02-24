@@ -1,10 +1,5 @@
 from app import app
 
-from twisted.internet import reactor
-from twisted.web.proxy import ReverseProxyResource
-from twisted.web.resource import Resource
-from twisted.web.server import Site
-from twisted.web.wsgi import WSGIResource
 import ssl
 
 

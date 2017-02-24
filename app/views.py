@@ -20,6 +20,8 @@ def index():
 def diapers():
     child = Child.query.filter_by(user_id=current_user.id).first()
     diapers = Diaper.query.filter_by(child_id=child.child_id).order_by(Diaper.date.desc())[0:30]
+    for diaper in diapers:
+        diaper.date = diaper.date.strftime("%I:%M%p on %m/%d/%y")
     sizes = [{'size': '0'}, {'size': '1'}, {'size': '2'}, {'size': '3'}, {'size': '4'}, {'size': '5'}]
     if len(diapers) > 0:
         sizes[diapers[0].diaper_size]['selected'] = 'selected'
@@ -31,6 +33,8 @@ def diapers():
 def bottles():
     child = Child.query.filter_by(user_id=current_user.id).first()
     bottles = Bottle.query.filter_by(child_id=child.child_id).order_by(Bottle.date.desc())[0:30]
+    for bottle in bottles:
+        bottle.date = bottle.date.strftime("%I:%M%p on %m/%d/%y")
     return render_template('bottles.html', child_name=child.child_name, bottles=bottles)
 
 
