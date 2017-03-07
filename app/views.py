@@ -9,10 +9,10 @@ from .utility import *
 
 
 @app.route('/')
-@app.route('/index')
+@app.route('/stats')
 @login_required
 def index():
-    return render_template('overview.html')
+    return render_template('stats.html')
 
 
 @app.route('/diapers')
@@ -84,12 +84,15 @@ def add_diaper():
 def add_bottle():
     child = Child.query.filter_by(user_id=current_user.id).first()
     date = request.form['date']
-    amount = float(request.form['amount'])
+    if request.form['submit'] == 'bottle':
+        amount = float(request.form['amount'])
+        change_formula_inventory(amount * -1)
+    else:
+        amount = -1
     bottle = Bottle(child.child_id, date, amount)
     db.session.add(bottle)
     db.session.flush()
     db.session.commit()
-    change_formula_inventory(amount * -1)
     return redirect(url_for('bottles'))
 
 

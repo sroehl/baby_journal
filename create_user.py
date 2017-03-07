@@ -3,8 +3,8 @@ from app import app, db, models, bcrypt
 
 def main():
     with app.app_context():
-        db.metadata.drop_all(db.engine)
-        db.metadata.create_all(db.engine)
+        #db.metadata.drop_all(db.engine)
+        #db.metadata.create_all(db.engine)
         username = 'steve'
         password = bcrypt.generate_password_hash(password='test').decode('utf-8')
         email = 'sprzeo@gmail.com'
