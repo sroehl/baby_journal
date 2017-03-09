@@ -1,0 +1,18 @@
+version: '2'
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: baby_journal
+# In non production this is useful for testing
+#    ports:
+#      - "3306:3306"
+    volumes:
+      - ./db_data/:/docker-entrypoint-initdb.d
+  baby_journal:
+    image: baby_journal
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
