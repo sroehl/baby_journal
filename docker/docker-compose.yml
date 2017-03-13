@@ -15,7 +15,7 @@ services:
   celery-worker:
     image: baby_journal:prod
     environment:
-      CELERY_BROKER_URL: redis://redis-prod
+      CELERY_BROKER_URL: redis://redis
     entrypoint:
       - celery 
       - worker 
