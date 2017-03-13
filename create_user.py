@@ -19,4 +19,6 @@ def main():
         db.session.flush()
         db.session.commit()
 
-main()
+#main()
+
+db.metadata.create_all(db.engine)

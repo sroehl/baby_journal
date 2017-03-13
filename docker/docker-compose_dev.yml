@@ -1,32 +1,32 @@
 version: '2'
 services:
-  db:
+  db-dev:
     image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: baby_journal
 # In non production this is useful for testing
     ports:
-      - "3307:3306"
+      - "3308:3306"
     volumes:
       - ./db_data/:/docker-entrypoint-initdb.d
-  redis:
+  redis-dev:
     image: redis
-  celery-worker:
-    image: baby_journal:prod
+  celery-worker-dev:
+    image: baby_journal:dev
     environment:
-      CELERY_BROKER_URL: redis://redis-prod
+      CELERY_BROKER_URL: redis://redis-dev
     entrypoint:
       - celery 
       - worker 
       - -A 
       - app.celery 
       - --loglevel=info
-  baby_journal:
-    image: baby_journal:prod
+  baby_journal-dev:
+    image: baby_journal:dev
     ports:
-      - "5000:5000"
+      - "5001:5000"
     depends_on:
-      - db
-      - redis
-      - celery-worker
+      - db-dev
+      - redis-dev
+      - celery-worker-dev

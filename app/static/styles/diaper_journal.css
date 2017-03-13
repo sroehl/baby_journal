@@ -141,3 +141,18 @@ li.newBottle {
     color: #f5f5f5;
 }
 
+.stat-card {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.stat-title {
+  text-align: center;
+}
+
+.stat-text {
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
+}
+

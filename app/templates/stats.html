@@ -1,6 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="mdl-layout__tab-panel is-active" id="stats">
-        main
+    {% for stat in stats %}
+        <div class="mdl-card stat-card">
+              <div class="stat-title">
+                <h2 class="stat-title">{{ stat.description }}</h2>
+              </div>
+          <div class="mdl-card__supporting-text stat-text">
+            <h2>{{ stat.value }}</h2>
+          </div>
+        </div>
+        <br>
+    {% endfor %}
     </div>
 {% endblock %}

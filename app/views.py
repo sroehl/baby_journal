@@ -5,6 +5,7 @@ from flask_login import login_required, login_user, logout_user, current_user
 from flask_bcrypt import Bcrypt
 from .models import User, Diaper, Bottle, Child
 from .forms import LoginForm, RegisterForm
+from .stats import get_stats, update_stats
 from .utility import *
 
 
@@ -12,7 +13,9 @@ from .utility import *
 @app.route('/stats')
 @login_required
 def index():
-    return render_template('stats.html')
+    child = Child.query.filter_by(user_id=current_user.id).first()
+    json_stats = get_stats(child.child_id)
+    return render_template('stats.html', stats=json_stats)
 
 
 @app.route('/diapers')
@@ -76,6 +79,7 @@ def add_diaper():
     db.session.flush()
     db.session.commit()
     change_diaper_inventory(diaper_size, -1)
+    update_stats.delay(child.child_id)
     return redirect(url_for('diapers'))
 
 
@@ -93,6 +97,7 @@ def add_bottle():
     db.session.add(bottle)
     db.session.flush()
     db.session.commit()
+    update_stats.delay(child.child_id)
     return redirect(url_for('bottles'))
 
 

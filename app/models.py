@@ -120,3 +120,16 @@ class InventoryFormula(db.Model):
 class Setting(db.Model):
     __tablename__ = 'settings'
     id = db.Column(db.Integer, primary_key=True)
+
+
+class Stats(db.Model):
+    __tablename__ = 'stats'
+    id = db.Column(db.Integer, primary_key=True)
+    child_id = db.Column('child_id', db.Integer, db.ForeignKey("children.child_id"))
+    stat_id = db.Column('stat_id', db.Integer)
+    value = db.Column('value', db.String(4000))
+
+    def __init__(self, child_id, stat_id, value):
+        self.child_id = child_id
+        self.stat_id = stat_id
+        self.value = value
