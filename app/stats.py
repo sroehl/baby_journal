@@ -21,7 +21,8 @@ STAT_DESCRITPIONS={
     WEEK_DAY_BOTTLES: 'Average Ounces Per Day',
     DAILY_DIAPERS: 'Diapers Today',
     WEEKLY_DIAPERS: 'Diapers for the Week',
-    WEEK_DAY_DIAPERS: 'Average Diapers Per Day'
+    WEEK_DAY_DIAPERS: 'Average Diapers Per Day',
+    YESTERDAY_DIAPERS: 'Diapers Yesterday'
 }
 
 
