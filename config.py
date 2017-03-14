@@ -8,6 +8,7 @@ if PROD:
   SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@db:3306/baby_journal'
 else:
   SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@db-dev:3306/baby_journal'
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root@127.0.0.1:3307/baby_journal'
 
 if PROD:
   CELERY_BROKER_URL = 'redis://redis:6379/0'

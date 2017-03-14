@@ -9,8 +9,9 @@ WEEKLY_BOTTLES = 2
 WEEK_DAY_BOTTLES = 3
 
 DAILY_DIAPERS = 100
-WEEKLY_DIAPERS = 101
-WEEK_DAY_DIAPERS = 102
+YESTERDAY_DIAPERS = 101
+WEEKLY_DIAPERS = 102
+WEEK_DAY_DIAPERS = 103
 
 
 STAT_DESCRITPIONS={
@@ -86,8 +87,8 @@ def daily_diapers(child_id):
 
 def weekly_diapers(child_id):
     query = db.session.query(func.count(models.Diaper.date)).filter(and_(models.Diaper.child_id == child_id),
-                                                                    (cast(models.Diaper.date,
-                                                                          Date) == datetime.today().date()))
+                                                      (cast(models.Diaper.date, Date) > (datetime.today() - timedelta(days=8)).date()),
+                                                      (cast(models.Diaper.date, Date) != (datetime.today().date())))
     result = query.all()[0]
     if result is not None:
         add_stat(child_id, WEEKLY_DIAPERS, result[0])
@@ -102,13 +103,25 @@ def week_day_diapers(child_id):
         add_stat(child_id, WEEK_DAY_DIAPERS, round(result[0]/7, 0))
 
 
+def yesterday_diapers(child_id):
+    query = db.session.query(func.count(models.Diaper.date)).filter(and_(models.Diaper.child_id == child_id),
+                                                      (cast(models.Diaper.date, Date) == (datetime.today() - timedelta(days=1)).date()))
+    result = query.all()[0]
+    if result is not None:
+        add_stat(child_id, YESTERDAY_DIAPERS, result[0])
+
+
+
 @celery.task
 def update_stats(child_id):
+    #  Bottle section
     daily_bottles(child_id)
     yesterday_bottles(child_id)
     weekly_bottles(child_id)
     week_day_bottles(child_id)
+    #  Diaper Section
     daily_diapers(child_id)
+    yesterday_diapers(child_id)
     weekly_diapers(child_id)
     week_day_diapers(child_id)
 
@@ -121,5 +134,6 @@ def get_stats(child_id):
                            'value': stat.value})
     return json_stats
 
+#  This is only used for testing
 if __name__ == '__main__':
     update_stats(7)
