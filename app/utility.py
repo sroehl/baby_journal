@@ -37,7 +37,7 @@ def sort_array_by_date(orig_array):
             lowest_date = parse_date(orig_array[0].date)
             lowest_idx = 0
             for i in range(1, len(orig_array)):
-                next_date = parse_date(orig_array[1].date)
+                next_date = parse_date(orig_array[i].date)
                 if next_date < lowest_date:
                     lowest_date = next_date
                     lowest_idx = i
@@ -46,7 +46,7 @@ def sort_array_by_date(orig_array):
         else:
             if len(orig_array) == 1:
                 new_array.insert(0, orig_array[0])
-            orig_array.pop(0)
+                orig_array.pop(0)
     return new_array
 
 
