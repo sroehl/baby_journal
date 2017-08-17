@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+  <div class="mdl-tabs__tab-bar">
+      <a href="#food_bottles_panel" class="mdl-tabs__tab">Formula</a>
+      <a href="#food_solids_panel" class="mdl-tabs__tab">Solids</a>
+  </div>
+<div class="mdl-tabs__panel is-active" id="food_bottles_panel">
 <form id="bottle_form" action="/add_bottle" method="post">
   <div class="mdl-textfield mdl-js-textfield">
     <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="bottle-text"
@@ -20,16 +26,42 @@
       New bottle
     </button>
 </form>
+</div>
+<div class="mdl-tabs__panel" id="food_solids_panel">
+    <form id="solid_form" action="/add_solid" method="post">
+        <div class="mdl-textfield mdl-js-textfield">
+            Food:
+            <input class="mdl-textfield__input" type="text" id="solid-text" name="foodname" style="text-align: center;">
+        </div>
+        <br>
+            <input class="flatpickr" id="datepicker_food" name="date" type="text" placeholder="Select Date..">
+        <br>
+        <br>
+        <br>
+        <button type="submit"  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" name="submit" value="bottle">
+      Log!
+    </button>
+    </form>
+</div>
 <ul class="bottle-list mdl-list" id="bottleList">
-    {% for bottle in bottles %}
-        {% if bottle.amount == -1 %}
-            <li class="newBottle">
-                <hr class="new-bottle" id="{{ bottle.id }}" onclick="bottleDeleteClicked(this)"/>
-            </li>
+    {% for food in foods %}
+        {% if food.type == "bottle" %}
+            {% if food.amount == -1 %}
+                <li class="newBottle">
+                    <hr class="new-bottle" id="{{ food.id }}" onclick="bottleDeleteClicked(this)"/>
+                </li>
+            {% else %}
+                <li>
+                    <span>{{ child_name }} drank {{ food.amount }} oz at {{ food.date }}
+                        <img class="bottleBottlesImg" height=20 width=20 id="{{ food.id }}" src="static/images/delete.png" onclick="bottleDeleteClicked(this)"/>
+                    </span>
+                </li>
+            {% endif %}
         {% else %}
             <li>
-                <span>{{ child_name }} drank {{ bottle.amount }} oz at {{ bottle.date }}
-                    <img class="bottleBottlesImg" height=20 width=20 id="{{ bottle.id }}" src="static/images/delete.png" onclick="bottleDeleteClicked(this)"/>
+                <span>
+                    {{ child_name }} ate {{ food.name }} at {{ food.date }}
+                    <img class="bottleBottlesImg" height=20 width=20 id="{{ food.id }}" src="static/images/delete.png" onclick="solidDeleteClicked(this)"/>
                 </span>
             </li>
         {% endif %}
@@ -39,6 +71,7 @@
     function setup(){
         var currentdate = new Date();
         document.getElementById("datepicker").flatpickr({enableTime: true, defaultDate: currentdate});
+        document.getElementById("datepicker_food").flatpickr({enableTime: true, defaultDate: currentdate});
     }
     window.onload = setup;
 </script>

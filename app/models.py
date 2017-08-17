@@ -92,6 +92,25 @@ class Bottle(db.Model):
                 'date': self.date,
                 'amount': self.amount}
 
+class Food(db.Model):
+    __tablename__ = 'food'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    child_id = db.Column('child_id', db.Integer, db.ForeignKey("children.child_id"))
+    date = db.Column('date', db.DateTime)
+    name = db.Column('name', db.String(30))
+
+    def __init__(self, child_id, date, name):
+        self.child_id = child_id
+        self.date = date
+        self.name = name
+
+    @property
+    def serialize(self):
+        return {'id': self.id,
+                'child_id': self.child_id,
+                'date': self.date,
+                'name': self.name}
+
 
 class InventoryDiapers(db.Model):
     __tablename__ = 'inventory_diapers'

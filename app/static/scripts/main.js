@@ -12,7 +12,13 @@ function bottleDeleteClicked(e){
 	var key = e.id;
     $.post("/delete_bottle", {id: key});
     location.reload();
-}	
+}
+
+function solidDeleteClicked(e){
+	var key = e.id;
+    $.post("/delete_solid", {id: key});
+    location.reload();
+}
 
 
 function diaperDeleteClicked(e){
@@ -21,31 +27,6 @@ function diaperDeleteClicked(e){
     location.reload();
 }	
 
-
-function logDiaper(child, type, size){
-	var diaperData = {
-		child: child,
-		type: type,
-		size: size,
-		date: Math.round(new Date().getTime()/1000.0)
-	}
-	var newDiaperKey = firebase.database().ref().child('diapers').push().key;
-	var updates = {};
-	updates['/diapers/' + child + '/' + newDiaperKey] = diaperData;
-	return firebase.database().ref().update(updates);
-}
-
-function logBottle(child, amount){
-	var bottleData = {
-		child: child,
-		amount: amount,
-		date: Math.round(new Date().getTime()/1000.0)
-	};
-	var newBottleKey = firebase.database().ref().child('bottles').push().key;
-	var updates = {};
-	updates['/bottles/' + child + '/' + newBottleKey] = bottleData;
-	return firebase.database().ref().update(updates);
-}
 
 function getRadioValue(options){
 	var radioVal = undefined;

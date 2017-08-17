@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for, session, flash, request, j
 from flask_login import login_required, login_user, logout_user, current_user
 
 from flask_bcrypt import Bcrypt
-from .models import User, Diaper, Bottle, Child
+from .models import User, Diaper, Bottle, Child, Food
 from .forms import LoginForm, RegisterForm
 from .stats import get_stats, update_stats
 from .utility import *
@@ -36,9 +36,18 @@ def diapers():
 def bottles():
     child = Child.query.filter_by(user_id=current_user.id).first()
     bottles = Bottle.query.filter_by(child_id=child.child_id).order_by(Bottle.date.desc())[0:30]
+    foods = Food.query.filter_by(child_id=child.child_id).order_by(Food.date.desc())[0:30]
+    allFood = []
     for bottle in bottles:
         bottle.date = bottle.date.strftime("%I:%M%p on %m/%d/%y")
-    return render_template('bottles.html', child_name=child.child_name, bottles=bottles)
+        bottle.type = "bottle"
+        allFood.append(bottle)
+    for food in foods:
+        food.date = food.date.strftime("%I:%M%p on %m/%d/%y")
+        food.type = 'food'
+        allFood.append(food)
+    allFoodSorted = sort_array_by_date(allFood)
+    return render_template('bottles.html', child_name=child.child_name, foods=allFoodSorted)
 
 
 @app.route('/inventory')
@@ -99,6 +108,27 @@ def add_bottle():
     db.session.commit()
     update_stats.delay(child.child_id)
     return redirect(url_for('bottles'))
+
+
+@app.route('/add_solid', methods=['POST'])
+@login_required
+def add_solid():
+    child = Child.query.filter_by(user_id=current_user.id).first()
+    date = request.form['date']
+    name = request.form['foodname']
+    food = Food(child.child_id, date, name)
+    db.session.add(food)
+    db.session.flush()
+    db.session.commit()
+    return redirect(url_for('bottles'))
+
+
+@app.route('/delete_solid', methods=['POST'])
+@login_required
+def delete_solid():
+    result = Food.query.filter_by(id=request.form['id']).delete()
+    db.session.commit()
+    return jsonify({"result": result})
 
 
 @app.route('/delete_bottle', methods=['POST'])
