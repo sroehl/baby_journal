@@ -1,7 +1,8 @@
-from app import app, celery, db, models
+import threading
+
+from app import db, models
 from sqlalchemy import func, and_, Date, cast
 from datetime import timedelta, datetime
-
 
 DAILY_BOTTLES = 0
 YESTERDAY_BOTTLES = 1
@@ -41,79 +42,100 @@ def add_stat(child_id, stat_id, value):
 
 
 def daily_bottles(child_id):
-    query = db.session.query(func.sum(models.Bottle.amount)).filter(and_(models.Bottle.child_id==child_id),
-                                                      (cast(models.Bottle.date, Date) == datetime.today().date()),
-                                                      (models.Bottle.amount > 0))
+    query = db.session.query(func.sum(models.Bottle.amount)).filter(and_(models.Bottle.child_id == child_id),
+                                                                    (func.date(
+                                                                        models.Bottle.date) == datetime.today().date()),
+                                                                    (models.Bottle.amount > 0))
     result = query.all()[0]
-    if result is not None:
+    if result is not None and result[0] is not None:
         add_stat(child_id, DAILY_BOTTLES, result[0])
 
 
 def yesterday_bottles(child_id):
     query = db.session.query(func.sum(models.Bottle.amount)).filter(and_(models.Bottle.child_id == child_id),
-                                                      (cast(models.Bottle.date, Date) == (datetime.today() - timedelta(days=1)).date()),
-                                                      (models.Bottle.amount > 0))
+                                                                    (func.date(models.Bottle.date) == (
+                                                                                datetime.today() - timedelta(
+                                                                            days=1)).date()),
+                                                                    (models.Bottle.amount > 0))
     result = query.all()[0]
-    if result is not None:
+    if result is not None and result[0] is not None:
         add_stat(child_id, YESTERDAY_BOTTLES, result[0])
 
 
 def weekly_bottles(child_id):
     query = db.session.query(func.sum(models.Bottle.amount)).filter(and_(models.Bottle.child_id == child_id),
-                                                      (cast(models.Bottle.date, Date) > (datetime.today() - timedelta(days=8)).date()),
-                                                      (cast(models.Bottle.date, Date) != (datetime.today().date())),
-                                                      (models.Bottle.amount > 0))
+                                                                    (func.date(models.Bottle.date) > (
+                                                                                datetime.today() - timedelta(
+                                                                            days=8)).date()),
+                                                                    (func.date(models.Bottle.date) != (
+                                                                        datetime.today().date())),
+                                                                    (models.Bottle.amount > 0))
     result = query.all()[0]
-    if result is not None:
+    if result is not None and result[0] is not None:
         add_stat(child_id, WEEKLY_BOTTLES, result[0])
 
 
 def week_day_bottles(child_id):
     query = db.session.query(func.sum(models.Bottle.amount)).filter(and_(models.Bottle.child_id == child_id),
-                                                      (cast(models.Bottle.date, Date) > (datetime.today() - timedelta(days=8)).date()),
-                                                      (cast(models.Bottle.date, Date) != (datetime.today().date())),
-                                                      (models.Bottle.amount > 0))
+                                                                    (func.date(models.Bottle.date) > (
+                                                                                datetime.today() - timedelta(
+                                                                            days=8)).date()),
+                                                                    (func.date(models.Bottle.date) != (
+                                                                        datetime.today().date())),
+                                                                    (models.Bottle.amount > 0))
     result = query.all()[0]
-    if result is not None:
-        add_stat(child_id, WEEK_DAY_BOTTLES, round(result[0]/7, 2))
+    if result is not None and result[0] is not None:
+        add_stat(child_id, WEEK_DAY_BOTTLES, round(result[0] / 7, 2))
 
 
 def daily_diapers(child_id):
-    query = db.session.query(func.count(models.Diaper.date)).filter(and_(models.Diaper.child_id==child_id),
-                                                      (cast(models.Diaper.date, Date) == datetime.today().date()))
+    query = db.session.query(func.count(models.Diaper.date)).filter(and_(models.Diaper.child_id == child_id),
+                                                                    (func.date(
+                                                                        models.Diaper.date) == datetime.today().date()))
     result = query.all()[0]
-    if result is not None:
+    if result is not None and result[0] is not None:
         add_stat(child_id, DAILY_DIAPERS, result[0])
 
 
 def weekly_diapers(child_id):
     query = db.session.query(func.count(models.Diaper.date)).filter(and_(models.Diaper.child_id == child_id),
-                                                      (cast(models.Diaper.date, Date) > (datetime.today() - timedelta(days=8)).date()),
-                                                      (cast(models.Diaper.date, Date) != (datetime.today().date())))
+                                                                    (func.date(models.Diaper.date) > (
+                                                                                datetime.today() - timedelta(
+                                                                            days=8)).date()),
+                                                                    (func.date(models.Diaper.date) != (
+                                                                        datetime.today().date())))
     result = query.all()[0]
-    if result is not None:
+    if result is not None and result[0] is not None:
         add_stat(child_id, WEEKLY_DIAPERS, result[0])
 
 
 def week_day_diapers(child_id):
     query = db.session.query(func.count(models.Diaper.date)).filter(and_(models.Diaper.child_id == child_id),
-                                                      (cast(models.Diaper.date, Date) > (datetime.today() - timedelta(days=8)).date()),
-                                                      (cast(models.Diaper.date, Date) != (datetime.today().date())))
+                                                                    (func.date(models.Diaper.date) > (
+                                                                                datetime.today() - timedelta(
+                                                                            days=8)).date()),
+                                                                    (func.date(models.Diaper.date) != (
+                                                                        datetime.today().date())))
     result = query.all()[0]
-    if result is not None:
-        add_stat(child_id, WEEK_DAY_DIAPERS, round(result[0]/7, 0))
+    if result is not None and result[0] is not None:
+        add_stat(child_id, WEEK_DAY_DIAPERS, round(result[0] / 7, 0))
 
 
 def yesterday_diapers(child_id):
     query = db.session.query(func.count(models.Diaper.date)).filter(and_(models.Diaper.child_id == child_id),
-                                                      (cast(models.Diaper.date, Date) == (datetime.today() - timedelta(days=1)).date()))
+                                                                    (func.date(models.Diaper.date) == (
+                                                                                datetime.today() - timedelta(
+                                                                            days=1)).date()))
     result = query.all()[0]
-    if result is not None:
+    if result is not None and result[0] is not None:
         add_stat(child_id, YESTERDAY_DIAPERS, result[0])
 
 
+def run_update(child_id):
+    thread = threading.Thread(target=update_stats, args=(child_id,))
+    thread.start()
 
-@celery.task
+
 def update_stats(child_id):
     #  Bottle section
     daily_bottles(child_id)

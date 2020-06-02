@@ -5,7 +5,9 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: baby_journal
-# In non production this is useful for testing
+    networks:
+      - baby_net
+    # In non production this is useful for testing
     ports:
       - "3307:3306"
     volumes:
@@ -14,19 +16,27 @@ services:
     image: redis
   celery-worker:
     image: baby_journal:prod
+    networks:
+      - baby_net
     environment:
       CELERY_BROKER_URL: redis://redis
     entrypoint:
-      - celery 
-      - worker 
-      - -A 
-      - app.celery 
+      - celery
+      - worker
+      - -A
+      - app.celery
       - --loglevel=info
   baby_journal:
     image: baby_journal:prod
     ports:
       - "5000:5000"
+    environment:
+      - DB_URL=db:3307
+    networks:
+      - baby_net
     depends_on:
       - db
       - redis
       - celery-worker
+networks:
+  baby_net:

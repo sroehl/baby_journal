@@ -5,7 +5,7 @@ from flask_login import login_required, login_user, logout_user, current_user
 from flask_bcrypt import Bcrypt
 from .models import User, Diaper, Bottle, Child, Food
 from .forms import LoginForm, RegisterForm
-from .stats import get_stats, update_stats
+from .stats import get_stats, run_update
 from .utility import *
 
 
@@ -79,7 +79,7 @@ def add_inventory_formula():
 @login_required
 def add_diaper():
     child = Child.query.filter_by(user_id=current_user.id).first()
-    date = request.form['date']
+    date = parse_request_date(request.form['date'])
     size = request.form['size']
     diaper_size = request.form['diaper_size']
     diaper_type = request.form['diaper_type']
@@ -88,7 +88,7 @@ def add_diaper():
     db.session.flush()
     db.session.commit()
     change_diaper_inventory(diaper_size, -1)
-    update_stats.delay(child.child_id)
+    run_update(child.child_id)
     return redirect(url_for('diapers'))
 
 
@@ -96,7 +96,7 @@ def add_diaper():
 @login_required
 def add_bottle():
     child = Child.query.filter_by(user_id=current_user.id).first()
-    date = request.form['date']
+    date = parse_request_date(request.form['date'])
     if request.form['submit'] == 'bottle':
         amount = float(request.form['amount'])
         change_formula_inventory(amount * -1)
@@ -106,7 +106,7 @@ def add_bottle():
     db.session.add(bottle)
     db.session.flush()
     db.session.commit()
-    update_stats.delay(child.child_id)
+    run_update(child.child_id)
     return redirect(url_for('bottles'))
 
 
@@ -114,7 +114,7 @@ def add_bottle():
 @login_required
 def add_solid():
     child = Child.query.filter_by(user_id=current_user.id).first()
-    date = request.form['date']
+    date = parse_request_date(request.form['date'])
     name = request.form['foodname']
     food = Food(child.child_id, date, name)
     db.session.add(food)
