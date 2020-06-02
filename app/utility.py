@@ -52,3 +52,7 @@ def sort_array_by_date(orig_array):
 
 def parse_date(date):
     return datetime.datetime.strptime(date, '%I:%M%p on %m/%d/%y')
+
+
+def parse_request_date(date):
+    return datetime.datetime.strptime(date, '%Y-%m-%d %H:%M')
