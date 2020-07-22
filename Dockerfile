@@ -1,4 +1,4 @@
-from python:3.4
+from python:3.6
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app/
